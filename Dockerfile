@@ -1,4 +1,4 @@
-FROM python:3.7.1-alpine3.8
+FROM python:3.9-alpine
 ENV PYTHONUNBUFFERED=1
 WORKDIR /opt/resource
 CMD ["/bin/sh"]
