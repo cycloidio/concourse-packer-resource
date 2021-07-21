@@ -7,9 +7,8 @@ RUN pip3 --no-cache-dir install --upgrade pip
 
 ARG PACKER_VERSION=0.0.0
 
-COPY hashicorp.asc .
-
-RUN apk add --update \
+RUN set -x && \
+    apk add --update \
         curl \
         git \
         gnupg \
@@ -17,7 +16,8 @@ RUN apk add --update \
         && \
     curl https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_SHA256SUMS.sig > packer_${PACKER_VERSION}_SHA256SUMS.sig && \
     curl https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_SHA256SUMS > packer_${PACKER_VERSION}_SHA256SUMS && \
-    gpg --import hashicorp.asc && \
+    curl https://keybase.io/hashicorp/pgp_keys.asc > hashicorp.pgp.asc && \
+    gpg --import hashicorp.pgp.asc && \
     gpg --verify packer_${PACKER_VERSION}_SHA256SUMS.sig packer_${PACKER_VERSION}_SHA256SUMS && \
     curl https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip > packer_${PACKER_VERSION}_linux_amd64.zip && \
     cat packer_${PACKER_VERSION}_SHA256SUMS | grep packer_${PACKER_VERSION}_linux_amd64.zip | sha256sum -c && \
@@ -25,7 +25,7 @@ RUN apk add --update \
     rm -f packer_${PACKER_VERSION}_SHA256SUMS.sig \
       packer_${PACKER_VERSION}_SHA256SUMS \
       packer_${PACKER_VERSION}_linux_amd64.zip \
-      hashicorp.asc
+      hashicorp.pgp.asc
 
 # COPY requirements.txt /app/requirements.txt
 
