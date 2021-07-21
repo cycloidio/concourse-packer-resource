@@ -2,14 +2,14 @@
 
 set -xeo pipefail
 
-DOCKER_IMAGE_NAME="snapkitchen/concourse-packer-resource"
+DOCKER_IMAGE_NAME="cycloid/concourse-packer-resource"
 
 # main
 
 : "${1:?"image version"}"
 
 # run specific version
-test_image="${DOCKER_IMAGE_NAME}-tests:${1}"
+test_image="${DOCKER_IMAGE_NAME}:${1}-tests"
 run_command_args=()
 # optionally enable ptvsd
 if [[ -n "${PTVSD_ENABLE}" ]]
